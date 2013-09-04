@@ -1,5 +1,5 @@
-shimney-sweeper
-===============
+# shimney-sweeper [![Build Status](https://www.travis-ci.org/webforge-labs/grunt-shimney-sweeper.png?branch=master)](https://www.travis-ci.org/webforge-labs/grunt-shimney-sweeper)
+
 
 Housekeep your shimney with grunt.
 

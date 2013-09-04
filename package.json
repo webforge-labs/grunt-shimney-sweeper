@@ -1,6 +1,6 @@
 {
   "name": "grunt-shimney-sweeper",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Housekeep your shimney with grunt.",
   "main": "Gruntfile.js",
   "directories": {

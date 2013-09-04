@@ -27,6 +27,20 @@ If the plugin has been installed correctly, running `grunt --help` at the comman
 
 ## usage
 
+```
 grunt shimney-sweeper:update-config
+```
 
-reads all your installed shimney packages from npm and writes your config to `www/js/config.js`
+reads all your installed shimney packages from npm and writes your config to `www/js/config.js`.
+
+use
+```javascript
+grunt.initConfig({
+  "shimney-sweeper": {
+    options: {
+      config: "other/placed/config.js"
+    }
+  }
+});
+```
+in your `Gruntfile.js` to configure the sweeper.

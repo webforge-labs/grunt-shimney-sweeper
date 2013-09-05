@@ -2,12 +2,12 @@ module.exports = function (grunt) {
 
   /* @TODO refactor the reading from the config into the shimney lib and use as a dependency */
 
-  var createPackages = function(packageDir, done, result) {
+  var createPackages = function(options, done, result) {
     var readInstalled = require("read-installed");
     var path = require('path');
     var _ = grunt.util._;
 
-    readInstalled(packageDir, null, function (err, rootPackage) {
+    readInstalled(options.packageDir, null, function (err, rootPackage) {
       if (err) {
         grunt.fatal(err);
       } else {
@@ -30,7 +30,7 @@ module.exports = function (grunt) {
               
               packages.push({
                 name: dep.shimName,
-                location: "../../"+relativePath.replace(/\\/g, '/')
+                location: options.nodeModulesUrl+relativePath.replace(/\\/g, '/')
               });
 
               traverseDependencies(dep, rootDep);
@@ -45,14 +45,14 @@ module.exports = function (grunt) {
     });
   };
 
-  var updateConfig = function (packageDir, configFile, done) {
-    if (!grunt.file.exists(configFile)) {
-      grunt.file.write(configFile, "/* globals requirejs */\nrequirejs.config({\n  \n});\n");
+  var updateConfig = function (options, done) {
+    if (!grunt.file.exists(options.configFile)) {
+      grunt.file.write(options.configFile, "/* globals requirejs */\nrequirejs.config({\n  \n});\n");
     }
 
-    require("config-mancer").modify(configFile, function(err, config, save) {
+    require("config-mancer").modify(options.configFile, function(err, config, save) {
 
-      createPackages(packageDir, done, function(packages) {
+      createPackages(options, done, function(packages) {
         config.packages = packages;
 
         save(config, function(err) {
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
             grunt.fatal('cannot save requirejs config'+ err);
             done(false);
           } else {
-            grunt.log.ok('wrote '+packages.length+' package'+(packages.length !== 1 ? 's' : '')+' to '+configFile);
+            grunt.log.ok('wrote '+packages.length+' package'+(packages.length !== 1 ? 's' : '')+' to '+options.configFile);
             done(true);
           }
         });
@@ -72,17 +72,17 @@ module.exports = function (grunt) {
     var done = this.async();
 
     var options = this.options({
-      config: "www/js/config.js",
-      packageDir: "."
+      configFile: "www/js/config.js",
+      packageDir: ".",
+      nodeModulesUrl: "../../"
     });
 
     if (todo === 'update-config') {
-      updateConfig(options.packageDir, options.config, done);
+      updateConfig(options, done);
 
     } else {
-      grunt.fatal('the todo: '+todo+' is not defined. Use grunt shimney-sweeper:update-config to update your requirejs configuration');
+      grunt.log.error('the todo: '+todo+' is not defined. Use grunt shimney-sweeper:update-config to update your requirejs configuration');
+      done(false);
     }
   });
-
-
 };

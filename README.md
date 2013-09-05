@@ -38,7 +38,8 @@ use
 grunt.initConfig({
   "shimney-sweeper": {
     options: {
-      config: "other/placed/config.js"
+      configFile: "other/placed/config.js"
+      nodeModulesUrl: "../../" // with trailing slash, without node_modules/ appended
     }
   }
 });

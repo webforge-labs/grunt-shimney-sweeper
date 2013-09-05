@@ -23,14 +23,29 @@ module.exports = function(grunt) {
 
     "shimney-sweeper": {
       options: {
-        config: "tmp/config.js",
-        packageDir: "tests/files/package_fixture"
+        configFile: "tmp/config.js",
+        packageDir: "tests/files/package_fixture",
+        nodeModulesUrl: ""
       }
     },
 
     nodeunit: {
       tests: ['tests/*_test.js'],
-    }
+    },
+
+    release: {
+       options: {
+         bump: true,
+         add: true, 
+         commit: true,
+         tag: true, 
+         push: true, 
+         pushTags: true, 
+         npm: true, 
+         commitMessage: 'release <%= version %>',
+         tagMessage: 'Version <%= version %>'
+       }
+     }
   });
 
   grunt.loadTasks('tasks');

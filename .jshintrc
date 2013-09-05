@@ -12,7 +12,11 @@
   "boss": true,
   "eqnull": true,
   "node": true,
+  "expr": true,
+
   "globals": {
-    "requirejs": true, "define": true, "require": true
+    "requirejs": true, "define": true, "require": true,
+
+    "describe": true, "it": true, "beforeEach": true
   }
 }

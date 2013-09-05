@@ -45,3 +45,8 @@ grunt.initConfig({
 });
 ```
 in your `Gruntfile.js` to configure the sweeper.
+
+## Migration
+
+### 1.0.0 => 1.1.0
+  - change `config` option into `configFile`

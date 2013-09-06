@@ -5,6 +5,7 @@ var path = require('path');
 
 var chai = require('chai');
 var expect = chai.expect;
+var assert = chai.assert;
 chai.use(require('./helpers/file'));
 
 describe('sweepout', function() {
@@ -16,35 +17,35 @@ describe('sweepout', function() {
     var packages = [
       {
         name: "knockout",
-        location: "node_modules/shimney-knockout"
+        location: "shimney/knockout"
       },
       {
         name: "jquery",
-        location: "node_modules/shimney-jquery"
+        location: "shimney/jquery"
       },
       {
         name: "sammy",
-        location: "node_modules/shimney-sammy"
+        location: "shimney/sammy"
       },
       {
         name: "twitter-bootstrap",
-        location: "node_modules/shimney-twitter-bootstrap"
+        location: "shimney/twitter-bootstrap"
       },
       {
         name: "lodash",
-        location: "node_modules/shimney-lodash"
+        location: "shimney/lodash"
       },
       {
         name: "hogan",
-        location: "node_modules/shimney-hogan"
+        location: "shimney/hogan"
       },
       {
         name: "cookie-monster",
-        location: "node_modules/shimney-cookie-monster"
+        location: "shimney/cookie-monster"
       },
       {
         name: "JSON",
-        location: "node_modules/shimney-cookie-monster/node_modules/shimney-json"
+        location: "shimney/JSON"
 
       }
     ];
@@ -53,17 +54,47 @@ describe('sweepout', function() {
       rimraf(tmp, done);
     });
 
-    it('should export all packages avaible to npm', function(done) {
+    it('should export all packages avaible to shimney', function(done) {
       sweeper.sweepout({packageDir: 'tests/files/package_fixture', dir: 'tmp'}, function(err, config) {
 
         _(packages).pluck('name').forEach(function(name) {
-          expect([tmp, 'npm', name]).to.be.an.existingDirectory;
+          var packageDir = [tmp, 'shimney', name].join(path.sep);
+
+          expect(packageDir).to.be.an.existingDirectory;
+          expect(packageDir+path.sep+'main.js').to.be.an.existingFile;
         });
 
+
         done();
-
       });
+    });
 
+    it("should export the assets listet in the shimney config as well", function(done) {
+      sweeper.sweepout({packageDir: 'tests/files/package_fixture', dir: 'tmp'}, function(err, config) {
+
+        var bs = [tmp, 'shimney', 'twitter-bootstrap'].join(path.sep);
+
+        // check some specials
+        expect([bs, 'css']).to.be.an.existingDirectory;
+        expect([bs, 'img']).to.be.an.existingDirectory;
+
+        expect([bs, 'img', 'glyphicons-halflings.png']).to.be.an.existingFile;
+        expect([bs, 'img', 'glyphicons-halflings-white.png']).to.be.an.existingFile;
+
+        expect([bs, 'css', "bootstrap.css"]).to.be.an.existingFile;
+        expect([bs, 'css', "bootstrap-responsive.css"]).to.be.an.existingFile;
+
+        done();
+      });
+    });
+
+    it("should provide a changed config for the exported packages and write it", function(done) {
+      sweeper.sweepout({packageDir: 'tests/files/package_fixture', dir: 'tmp'}, function(err, config) {
+
+        assert.deepEqual(config, {packages: packages});
+        expect([tmp, 'config.js']).to.be.an.existingFile;
+        done();
+      });
     });
   });
 });

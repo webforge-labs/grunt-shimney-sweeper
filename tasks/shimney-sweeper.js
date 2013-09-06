@@ -10,16 +10,21 @@ module.exports = function (grunt) {
       nodeModulesUrl: "../../"
     });
 
-    var sweeper = require('lib/shimney-sweeper')(grunt);
+    var sweeper = require('../lib/shimney/sweeper')(grunt);
 
     if (todo === 'update-config') {
       sweeper.updateConfig(options, done);
 
     } else if (todo === 'sweepout') {
+      options.dir = grunt.option('dir');
       sweeper.sweepout(options, done);
 
     } else {
-      grunt.log.error("the todo: "+todo+" is not defined.\nUse grunt shimney-sweeper:update-config to update your requirejs configuration.\nUse grunt shimney-sweeper:sweepout to export all shimneys from npm to an external directory.");
+      grunt.log.error(
+        "the todo: "+todo+" is not defined.\n"+
+        "Use grunt shimney-sweeper:update-config to update your requirejs configuration.\n"+
+        "Use grunt shimney-sweeper:sweepout --dir=\"path/to/it\" to export all shimneys from npm to an external directory."
+      );
       done(false);
     }
   });

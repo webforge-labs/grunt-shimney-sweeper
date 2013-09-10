@@ -17,6 +17,6 @@
   "globals": {
     "requirejs": true, "define": true, "require": true,
 
-    "describe": true, "it": true, "beforeEach": true
+    "describe": true, "it": true, "beforeEach": true, "before": true
   }
 }

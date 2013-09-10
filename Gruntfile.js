@@ -31,6 +31,53 @@ module.exports = function(grunt) {
       }
     },
 
+    "shimney-sweeper-merge-config": {
+      "no-target": {
+        options: {
+
+        }
+      },
+
+      "test": {
+        options: {
+          targetFile: 'tmp/boot.js',
+
+          configFiles: [
+            'tests/files/merge-config-fixture/external-library/config.js',
+            'tests/files/merge-config-fixture/project/boot.js'
+          ]
+        }
+      },
+
+      "template": {
+        options: {
+          targetFile: 'tmp/boot.js',
+
+          template: 'tests/files/merge-config-fixture/project/boot.js',
+
+          configFiles: [
+            'tests/files/merge-config-fixture/external-library/config.js',
+            'tests/files/merge-config-fixture/project/boot.js'
+          ]
+        }
+      },
+
+      "modify": {
+        options: {
+          targetFile: 'tmp/boot.js',
+
+          configFiles: [
+            'tests/files/merge-config-fixture/external-library/config.js',
+            'tests/files/merge-config-fixture/project/boot.js'
+          ],
+
+          modify: function(mergedConfig) {
+            return { paths: {'user': 'overriden'} };
+          }
+        }
+      }
+    },
+
     nodeunit: {
       tests: ['tests/*_test.js'],
     },

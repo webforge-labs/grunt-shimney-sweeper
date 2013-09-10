@@ -3,6 +3,11 @@ module.exports = function(grunt) {
 
   var requirejs = require('requirejs');
 
+  grunt.util.tasks = function(taskName, taskTarget, config) {
+    grunt.config(taskName+'.'+taskTarget, config);
+    grunt.task.run(taskName+':'+taskTarget);
+  };
+
   requirejs.define('node/print', [], function() {
     return function print(msg) {
       if (msg.substring(0, 5) === 'Error') {
@@ -30,9 +35,24 @@ module.exports = function(grunt) {
     return requirejs.optimize(options, options.done.bind(null, done));
   };
 
+  var mergeBootFile = function() {
+
+
+  };
+
   grunt.registerMultiTask('shimney-sweeper-build', 'Builds a full project with shimneys.', function() {
     var done = this.async();
 
-    
+    var options = this.options({
+      prepareDir: 'tmp/',
+      targetDir: grunt.option('target-dir')
+    });
+
+    if (!options.targetDir) {
+      grunt.fatal('You need to specify a targetDirectory in the multi task options or per --target-dir');
+    }
+
+    console.log('still done');
+    done();
   });
 };

@@ -31,6 +31,31 @@ module.exports = function(grunt) {
       }
     },
 
+    "shimney-sweeper-build": {
+      'no-target': {
+        options: {
+
+        }
+      },
+
+      test: {
+        options: {
+          targetDir: 'tmp/',
+
+          project: {
+            src: 'tests/files/build-fixture-with-vendors/project/www/js/'
+          },
+          
+          libaries: [
+            {
+              name: 'external-library',
+              src: 'tests/files/build-fixture-with-vendors/external-library/src'
+            }
+          ]
+        }
+      }
+    },
+
     nodeunit: {
       tests: ['tests/*_test.js'],
     },

@@ -8,48 +8,91 @@ var expect = chai.expect;
 var assert = chai.assert;
 chai.use(require('./helpers/file'));
 
-var tmp = "tmp/";
-
+var tmpDir = "tmp/";
 var tmpPath = function (relativePath) {
-  return (tmp+relativePath).split(/\//).join(path.sep);
+  return (tmpDir+relativePath).split(/\//).join(path.sep);
 };
+
+var GRUNT_TASK_ERROR = 3, GRUNT_FATAL_ERROR = 1, GRUNT_OK = 0;
 
 var build = {
   readConfig: function(configPath, cb) {
     require("config-mancer").get(tmpPath(configPath), function(err, config, data) {
       if (err) {
-        assert.fail('config mancer should be able to read config in boot from: '+baseUrl+'boot.js');
+        assert.fail('config mancer should be able to read config in boot from: '+configPath);
       } else {
         return cb(config);
       }
+    });
+  },
+
+  runTask: function(done, taskTarget, cliOptions, cb) {
+    var gruntTask, tmpOut = tmpPath('grunt-out'), cmd, info;
+    taskTarget = taskTarget || 'test';
+    cliOptions = cliOptions ? cliOptions+' ' : '';
+    grunt.file.mkdir(tmpDir);
+
+    gruntTask = exec(cmd = 'grunt shimney-sweeper-build:'+taskTarget+' '+cliOptions+'> '+tmpOut,
+      function (err, stdout, stderr) {
+        if (err !== null) {
+          info = {
+            cmd: cmd,
+            out: grunt.file.read(tmpOut),
+            err: err
+          };
+        } else {
+          info = {
+            cmd: cmd,
+            out: grunt.file.read(tmpOut),
+            err: null
+          };
+        }
+      });
+
+    gruntTask.on('close', function (code) {
+      info.code = code;
+      if (cb) {
+        cb(info);
+      } else if (info.code !== 0) {
+        console.log('Error calling '+info.cmd, info.err);
+        console.log(info.out);
+      } else {
+        //console.log('grunt exited with code 0');
+      }
+      
+      done();
     });
   }
 };
 
 before(function(done) {
-  rimraf(tmp, done);
-});
-
-before(function(done) {
-  var gruntTask;
-
-  gruntTask = exec('grunt shimney-sweeper-build:test',
-    function (error, stdout, stderr) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
-
-  gruntTask.on('close', function (code) {
-    console.log('grunt exited with code ' + code);
-    done();
-  });
+  rimraf(tmpDir, done);  
 });
 
 describe('build', function() {
   var baseUrl = 'src/';
+
+  describe('task options', function() {
+
+    it('should require a target-dir specified', function(done) {
+      build.runTask(done, 'no-target', '--no-color', function(info) {
+        expect(info.out).to.contain('You need to specify a targetDirectory');
+        expect(info.code).to.be.equal(GRUNT_FATAL_ERROR); // whats the right for "usage error"?
+      });
+    });
+
+    it('should accept a target-dir specified through cli options', function(done) {
+      build.runTask(done, 'no-target', '--no-color --target-dir='+tmpDir, function(info) {
+        expect(info.out).to.contain('Done, without errors');
+        expect(info.code).to.be.equal(GRUNT_OK);
+      });
+    });
+
+  });
+
+  before(function(done) {
+    build.runTask(done);
+  });
 
   describe('merges the configuration files into the boot file', function() {
 

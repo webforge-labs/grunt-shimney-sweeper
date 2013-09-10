@@ -23,7 +23,7 @@
     "grunt": "~0.4.1",
     "config-mancer": "~0.2.1",
     "read-installed": "~0.2.4",
-    "requirejs": "~2.1.0"
+    "requirejs": "~2.1.8"
   },
   "devDependencies": {
     "grunt-contrib-clean": "~0.5.0",
@@ -32,6 +32,8 @@
     "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-release": "~0.5.1",
     "chai": "~1.7.2",
-    "rimraf": "~2.2.2"
+    "rimraf": "~2.2.2",
+    "tmp": "0.0.21",
+    "requirejs": "~2.1.8"
   }
 }

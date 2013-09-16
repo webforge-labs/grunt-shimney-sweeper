@@ -82,6 +82,18 @@ module.exports = function(grunt) {
       tests: ['tests/*_test.js'],
     },
 
+    simplemocha: {
+      options: {
+        globals: ['should'],
+        timeout: 3000,
+        ignoreLeaks: false,
+        ui: 'bdd',
+        //reporter: 'tap'
+      },
+
+      all: { src: ['test/**/*.js'] }
+    },
+
     release: {
        options: {
          bump: true,
@@ -102,8 +114,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-release');
 
-  grunt.registerTask('test', ['clean', 'shimney-sweeper:update-config', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'shimney-sweeper:update-config', 'nodeunit', 'simplemocha']);
   grunt.registerTask('default', ['jshint', 'test']);
 };

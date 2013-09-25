@@ -11,7 +11,6 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
-        'tests/*.js',
         'test/*.js'
       ],
       options: {
@@ -26,7 +25,7 @@ module.exports = function(grunt) {
     "shimney-sweeper": {
       options: {
         configFile: "tmp/config.js",
-        packageDir: "tests/files/package_fixture",
+        packageDir: "test/files/package_fixture",
         nodeModulesUrl: ""
       }
     },
@@ -43,8 +42,8 @@ module.exports = function(grunt) {
           targetFile: 'tmp/boot.js',
 
           configFiles: [
-            'tests/files/merge-config-fixture/external-library/config.js',
-            'tests/files/merge-config-fixture/project/boot.js'
+            'test/files/merge-config-fixture/external-library/config.js',
+            'test/files/merge-config-fixture/project/boot.js'
           ]
         }
       },
@@ -53,11 +52,11 @@ module.exports = function(grunt) {
         options: {
           targetFile: 'tmp/boot.js',
 
-          template: 'tests/files/merge-config-fixture/project/boot.js',
+          template: 'test/files/merge-config-fixture/project/boot.js',
 
           configFiles: [
-            'tests/files/merge-config-fixture/external-library/config.js',
-            'tests/files/merge-config-fixture/project/boot.js'
+            'test/files/merge-config-fixture/external-library/config.js',
+            'test/files/merge-config-fixture/project/boot.js'
           ]
         }
       },
@@ -67,8 +66,8 @@ module.exports = function(grunt) {
           targetFile: 'tmp/boot.js',
 
           configFiles: [
-            'tests/files/merge-config-fixture/external-library/config.js',
-            'tests/files/merge-config-fixture/project/boot.js'
+            'test/files/merge-config-fixture/external-library/config.js',
+            'test/files/merge-config-fixture/project/boot.js'
           ],
 
           modify: function(mergedConfig) {
@@ -76,10 +75,6 @@ module.exports = function(grunt) {
           }
         }
       }
-    },
-
-    nodeunit: {
-      tests: ['tests/*_test.js'],
     },
 
     simplemocha: {
@@ -113,7 +108,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-release');
 

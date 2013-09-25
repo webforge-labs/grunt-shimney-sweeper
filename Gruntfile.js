@@ -11,7 +11,6 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
-        'tests/*.js',
         'test/*.js'
       ],
       options: {
@@ -26,13 +25,68 @@ module.exports = function(grunt) {
     "shimney-sweeper": {
       options: {
         configFile: "tmp/config.js",
-        packageDir: "tests/files/package_fixture",
+        packageDir: "test/files/package_fixture",
         nodeModulesUrl: ""
       }
     },
 
-    nodeunit: {
-      tests: ['tests/*_test.js'],
+    "shimney-sweeper-merge-config": {
+      "no-target": {
+        options: {
+
+        }
+      },
+
+      "test": {
+        options: {
+          targetFile: 'tmp/boot.js',
+
+          configFiles: [
+            'test/files/merge-config-fixture/external-library/config.js',
+            'test/files/merge-config-fixture/project/boot.js'
+          ]
+        }
+      },
+
+      "template": {
+        options: {
+          targetFile: 'tmp/boot.js',
+
+          template: 'test/files/merge-config-fixture/project/boot.js',
+
+          configFiles: [
+            'test/files/merge-config-fixture/external-library/config.js',
+            'test/files/merge-config-fixture/project/boot.js'
+          ]
+        }
+      },
+
+      "modify": {
+        options: {
+          targetFile: 'tmp/boot.js',
+
+          configFiles: [
+            'test/files/merge-config-fixture/external-library/config.js',
+            'test/files/merge-config-fixture/project/boot.js'
+          ],
+
+          modify: function(mergedConfig) {
+            return { paths: {'user': 'overriden'} };
+          }
+        }
+      }
+    },
+
+    simplemocha: {
+      options: {
+        globals: ['should'],
+        timeout: 3000,
+        ignoreLeaks: true,
+        ui: 'bdd',
+        //reporter: 'tap'
+      },
+
+      all: { src: ['test/**/*Test.js'] }
     },
 
     release: {
@@ -54,9 +108,9 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-release');
 
-  grunt.registerTask('test', ['clean', 'shimney-sweeper:update-config', 'nodeunit']);
+  grunt.registerTask('test', ['simplemocha']);
   grunt.registerTask('default', ['jshint', 'test']);
 };

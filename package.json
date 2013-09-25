@@ -21,16 +21,18 @@
   "license": "MIT",
   "dependencies": {
     "grunt": "~0.4.1",
-    "config-mancer": "~0.2.1",
-    "read-installed": "~0.2.4"
+    "read-installed": "~0.2.4",
+    "async": "~0.2.9",
+    "stringify-object": "~0.1.6",
+    "sprintf": "~0.1.2",
+    "requirejs-config-file": "~1.1.0"
   },
   "devDependencies": {
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-jshint": "~0.6.4",
-    "nodeunit": "~0.8.1",
-    "grunt-contrib-nodeunit": "~0.2.0",
     "grunt-release": "~0.5.1",
     "chai": "~1.7.2",
-    "rimraf": "~2.2.2"
+    "rimraf": "~2.2.2",
+    "grunt-simple-mocha": "~0.4.0"
   }
 }

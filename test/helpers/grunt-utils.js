@@ -7,14 +7,17 @@ var chai = require('chai'),
 
 chai.use(require('./file'));
 
-module.exports = {
-  GRUNT_EXIT: {
+module.exports = function (taskName) {
+
+  this.taskName = taskName;
+
+  this.GRUNT_EXIT = {
     OK: 0,
     TASK_ERROR: 3,
     FATAL_ERROR: 1
   },
 
-  readConfig: function(configPath, cb) {
+  this.readConfig = function(configPath, cb) {
     var configFile = new ConfigFile(configPath);
 
     configFile.read(function(err, config, data) {
@@ -24,9 +27,9 @@ module.exports = {
         cb(null, config, data);
       }
     });
-  },
+  };
 
-  runAndRead: function(taskTarget, configPath, cb) {
+  this.runAndRead = function(taskTarget, configPath, cb) {
     var utils = this;
 
     utils.task(taskTarget).run(function(info) {
@@ -35,17 +38,16 @@ module.exports = {
 
       utils.readConfig(configPath, cb);
     });
-  },
+  };
 
-  task: function(taskTarget, cliOptions) {
-    var runner = new TaskRunner('shimney-sweeper-merge-config', taskTarget || 'test', cliOptions);
+  this.task = function(taskTarget, cliOptions) {
+    var runner = new TaskRunner(this.taskName, taskTarget || 'test', cliOptions);
 
     return runner;
-  },
+  };
 
-  taskOK: function(info) {
+  this.taskOK = function(info) {
     expect(info.out).to.contain('Done, without errors');
     expect(info.code).to.be.equal(this.GRUNT_EXIT.OK);
-  }
-
+  };
 };

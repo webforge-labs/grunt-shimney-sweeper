@@ -8,19 +8,21 @@ var expect = chai.expect;
 var assert = chai.assert;
 chai.use(require('./helpers/file'));
 var ConfigFile = require('requirejs-config-file').ConfigFile;
+var GruntUtil = require('./helpers/grunt-utils');
 
 var tmpDir = "tmp/";
 var tmpPath = function (relativePath) {
   return (tmpDir+relativePath).split(/\//).join(path.sep);
 };
 
-var utils = require('./helpers/grunt-utils'), GRUNT_EXIT = utils.GRUNT_EXIT;
+var utils = new GruntUtil('shimney-sweeper-merge-config');
+var GRUNT_EXIT = utils.GRUNT_EXIT;
 
 before(function(done) {
   rimraf(tmpDir, done);
 });
 
-describe('shimney-sweeper-merge-config', function() {
+describe('merge-config', function() {
   var bootjs = tmpPath('boot.js'), config;
 
   it('should require a targetFile as a path specified', function(done) {
@@ -64,27 +66,18 @@ describe('shimney-sweeper-merge-config', function() {
     });
 
     describe('and when returning a merged config', function() {
-      before(function(done) {
-        utils.task('test').run(function(info) {
-          utils.taskOK(info); // nicer: a chai helper
-          expect(bootjs).to.be.an.existingFile;
-
-          utils.readConfig(bootjs, function(err, readConfig) {
-            if (err) return done(err);
-
-            config = readConfig;
-            done();
-          });
-        });
-      });
-
+      
       it('should merge every config property from both configs into the target-file', function(done) {
-        expect(config).to.have.property('paths');
-        expect(config).to.have.property('packages');
-        expect(config).to.have.property('baseUrl');
-        expect(config).to.have.property('urlArgs');
+        utils.runAndRead('test', bootjs, function(err, config) {
+          expect(err).to.not.exist;
 
-        done();
+          expect(config).to.have.property('paths');
+          expect(config).to.have.property('packages');
+          expect(config).to.have.property('baseUrl');
+          expect(config).to.have.property('urlArgs');
+
+          done();
+        });
       });
     });
 

@@ -77,8 +77,10 @@ module.exports = function(grunt) {
 
       var targetConfigFile = new ConfigFile(options.targetFile);
 
-      targetConfigFile.read(function(err, fileContents) {
+      targetConfigFile.read(function(err, config) {
         if (err) return grunt.fatal('Cannot read config from template '+err);
+
+        _.merge(config, mergedConfig);
 
         targetConfigFile.write(function (err) {
           if (err) return grunt.fatal(err);

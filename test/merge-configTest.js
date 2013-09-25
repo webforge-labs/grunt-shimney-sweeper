@@ -7,52 +7,14 @@ var chai = require('chai');
 var expect = chai.expect;
 var assert = chai.assert;
 chai.use(require('./helpers/file'));
+var ConfigFile = require('requirejs-config-file').ConfigFile;
 
 var tmpDir = "tmp/";
 var tmpPath = function (relativePath) {
   return (tmpDir+relativePath).split(/\//).join(path.sep);
 };
 
-var TaskRunner = require('./helpers/task-runner');
-var GRUNT_EXIT = {
-  OK: 0,
-  TASK_ERROR: 3,
-  FATAL_ERROR: 1
-};
-
-var utils = {
-  readConfig: function(configPath, cb) {
-    require("config-mancer").get(configPath, function(err, config, data) {
-      if (err) {
-        cb('config mancer should be able to read config in boot from: '+configPath+" contents of the file are: >>>"+grunt.file.read(configPath)+"<<<\nerror is: "+err);
-      } else {
-        cb(null, config, data);
-      }
-    });
-  },
-
-  runAndRead: function(taskTarget, configPath, cb) {
-    var utils = this;
-
-    utils.task(taskTarget).run(function(info) {
-      utils.taskOK(info);
-      expect(configPath).to.be.an.existingFile;
-
-      utils.readConfig(configPath, cb);
-    });
-  },
-
-  task: function(taskTarget, cliOptions) {
-    var runner = new TaskRunner('shimney-sweeper-merge-config', taskTarget || 'test', cliOptions);
-
-    return runner;
-  },
-
-  taskOK: function(info) {
-    expect(info.out).to.contain('Done, without errors');
-    expect(info.code).to.be.equal(GRUNT_EXIT.OK);
-  }
-};
+var utils = require('./helpers/grunt-utils'), GRUNT_EXIT = utils.GRUNT_EXIT;
 
 before(function(done) {
   rimraf(tmpDir, done);
@@ -71,8 +33,7 @@ describe('shimney-sweeper-merge-config', function() {
 
   it.skip('should accept a targetFile specified through cli options', function(done) {
     utils.task('test', '--target-file='+tmpDir).run(function(info) {
-      expect(info.out).to.contain('Done, without errors');
-      expect(info.code).to.be.equal(GRUNT_EXIT.OK);
+      utils.testOK(info);
 
       done();
     });

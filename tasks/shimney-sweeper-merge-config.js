@@ -1,7 +1,8 @@
 module.exports = function(grunt) {
   'use strict';
 
-  var configMancer = require("config-mancer"), _ = grunt.util._;
+  var ConfigFile = require('requirejs-config-file').ConfigFile;
+  var _ = grunt.util._;
   var async = require('async');
   var stringifyObject = require("stringify-object");
   var sprintf = require('sprintf').sprintf;
@@ -15,10 +16,12 @@ module.exports = function(grunt) {
     var mergedConfig = {};
 
     async.eachSeries(
-      options.configFiles, 
-      function(configFile, done) {
-        configMancer.get(configFile, function(err, config, data) {
-          if (err) return done('Cannot read the config from: '+configFile+' '+err);
+      options.configFiles,
+      function(configFilePath, done) {
+        var configFile =  new ConfigFile(configFilePath);
+
+        configFile.read(function(err, config) {
+          if (err) return done('Cannot read the config from: '+configFilePath+' '+err);
 
           mergedConfig = _.merge(mergedConfig, config);
           done();
@@ -32,34 +35,6 @@ module.exports = function(grunt) {
     );
   };
 
-  var generateConfig = function(options, config) {
-    return stringifyObject(
-      config, 
-      {
-        indent: options.indent,
-        singleQuotes: false
-      }
-    );
-  };
-
-  var generateConfigFile = function(options, config, cb) {
-    var configString = generateConfig(options, config);
-
-    if (options.template) {
-      configMancer.get(options.template, function(err, config, data) {
-        if (err) return cb('Cannot read config from template: '+options.template);
-
-        cb(null, data.src.replace(data.str, configString));
-      });
-    } else {
-      cb(null, sprintf(
-        "/* global requirejs */\n"+
-        "requirejs.config(%s);\n",
-        configString
-      ));
-    }
-  };
-
   grunt.registerMultiTask('shimney-sweeper-merge-config', 'Merges configs together.', function() {
     var done = this.async();
 
@@ -70,12 +45,13 @@ module.exports = function(grunt) {
     });
 
     if (!options.targetFile) {
-      grunt.fatal('You need to specify a targetFile in the multi task options or per --target-file');
+      grunt.fatal('You need to specify a targetFile in the multi task options or per --target-file on command line');
     }
 
     if (!options.configFiles) {
       grunt.fatal('You need to specify at least two configFiles to merge');
     }
+
 
     mergeConfigs(options, function(err, mergedConfig) {
       if (err) return grunt.fatal(err);
@@ -89,13 +65,27 @@ module.exports = function(grunt) {
         }
       }
 
-      generateConfigFile(options, mergedConfig, function(err, fileContents) {
-        if (err) return grunt.fatal(err);
+      if (options.template) {
+        grunt.file.copy(options.template, options.targetFile);
+      } else {
+        grunt.file.write(
+          options.targetFile, 
+          "/* global requirejs */\n"+
+          "requirejs.config({});\n"
+        );
+      }
 
-        grunt.file.write(options.targetFile, fileContents);
-        done();
+      var targetConfigFile = new ConfigFile(options.targetFile);
+
+      targetConfigFile.read(function(err, fileContents) {
+        if (err) return grunt.fatal('Cannot read config from template '+err);
+
+        targetConfigFile.write(function (err) {
+          if (err) return grunt.fatal(err);
+
+          done(true);
+        });
       });
-
     });
   });
 };

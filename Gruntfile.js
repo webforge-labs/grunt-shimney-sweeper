@@ -117,6 +117,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-simple-mocha');
   grunt.loadNpmTasks('grunt-release');
 
-  grunt.registerTask('test', ['clean', 'shimney-sweeper:update-config', 'nodeunit', 'simplemocha']);
+  grunt.registerTask('test', ['simplemocha']);
   grunt.registerTask('default', ['jshint', 'test']);
 };

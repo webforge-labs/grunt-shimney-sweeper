@@ -6,7 +6,6 @@ node_js:
 branches:
   only:
   - master
-  - merge-config
 
 before_script:
 - npm install -g grunt-cli

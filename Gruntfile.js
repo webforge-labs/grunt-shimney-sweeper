@@ -94,10 +94,10 @@ module.exports = function(grunt) {
         timeout: 3000,
         ignoreLeaks: true,
         ui: 'bdd',
-        //reporter: 'tap'
+        reporter: 'spec'
       },
 
-      all: { src: ['test/**/*Test.js'] }
+      all: { src: ['test/**/*-test.js'] }
     },
 
     release: {

@@ -14,15 +14,15 @@ var tmpPath = function (relativePath) {
 };
 
 var GruntUtil = require('./helpers/grunt-utils');
-var utils = new GruntUtil('shimney-sweeper:update-config');
-
-before(function(done) {
-  rimraf(tmpDir, done);
-});
+var utils = new GruntUtil('sweep-config');
 
 describe('task sweep-config', function() {
 
-  it("should create the correct config file", function () {
+  beforeEach(function(done) {
+    rimraf(tmpDir, done);
+  });
+
+  it("should create the correct config file", function (done) {
     utils.task('test').run(function (info) {
       utils.taskOK(info);
 
@@ -30,6 +30,7 @@ describe('task sweep-config', function() {
       var expected = grunt.file.read('test/files/expected-config.js');
 
       assert.equals(actual, expected, 'config file should be created successfully.');
+      done();
     });
   });
 });

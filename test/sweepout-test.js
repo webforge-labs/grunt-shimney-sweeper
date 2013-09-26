@@ -55,7 +55,7 @@ describe('task sweepout', function() {
     });
 
     it('should export all packages avaible to shimney', function(done) {
-      sweeper.sweepout({packageDir: 'test/files/package_fixture', dir: 'tmp'}, function(err, config) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
 
         _(packages).pluck('name').forEach(function(name) {
           var packageDir = [tmp, 'shimney', name].join(path.sep);
@@ -70,7 +70,7 @@ describe('task sweepout', function() {
     });
 
     it("should export the assets listet in the shimney config as well", function(done) {
-      sweeper.sweepout({packageDir: 'test/files/package_fixture', dir: 'tmp'}, function(err, config) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
 
         var bs = [tmp, 'shimney', 'twitter-bootstrap'].join(path.sep);
 
@@ -89,7 +89,7 @@ describe('task sweepout', function() {
     });
 
     it("should provide a changed config for the exported packages and write it", function(done) {
-      sweeper.sweepout({packageDir: 'test/files/package_fixture', dir: 'tmp'}, function(err, config) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
         expect(err).to.not.exist;
 
         assert.deepEqual(config, {packages: packages});

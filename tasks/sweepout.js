@@ -1,6 +1,6 @@
 module.exports = function (grunt) {
 
-  grunt.registerTask('sweepout', 'sweeps your shimney. use sweepout --dir=\"path/to/it\" to export all shimneys from npm to an external directory', function () {
+  grunt.registerMultiTask('sweepout', 'sweeps your shimney. use sweepout --dir=\"path/to/it\" to export all shimneys from npm to an external directory', function () {
     var done = this.async();
 
     var options = this.options({

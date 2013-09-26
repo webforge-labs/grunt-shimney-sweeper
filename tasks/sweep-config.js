@@ -1,6 +1,6 @@
 module.exports = function (grunt) {
 
-  grunt.registerTask('sweep-config', "Use grunt sweep-config to update your requirejs configuration to add all shimneys currently installed with npm.", function () {
+  grunt.registerMultiTask('sweep-config', "Use grunt sweep-config to update your requirejs configuration to add all shimneys currently installed with npm.", function () {
     var done = this.async();
 
     var options = this.options({

@@ -8,8 +8,7 @@ var chai = require('chai'),
   assert = chai.assert;
 chai.use(require('./helpers/file'));
 
-var tmpDir = "tmp/";
-var tmpPath = function (relativePath) {
+var tmpDir = 'tmp/', tmpPath = function (relativePath) {
   return (tmpDir+relativePath).split(/\//).join(path.sep);
 };
 
@@ -29,7 +28,7 @@ describe('task sweep-config', function() {
       var actual = grunt.file.read(tmpPath('config.js'));
       var expected = grunt.file.read('test/files/expected-config.js');
 
-      assert.equals(actual, expected, 'config file should be created successfully.');
+      assert.equal(actual, expected, 'config file should be created successfully.');
       done();
     });
   });

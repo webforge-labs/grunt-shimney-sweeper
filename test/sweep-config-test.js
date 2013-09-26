@@ -20,7 +20,7 @@ before(function(done) {
   rimraf(tmpDir, done);
 });
 
-describe('update-config task', function() {
+describe('task sweep-config', function() {
 
   it("should create the correct config file", function () {
     utils.task('test').run(function (info) {

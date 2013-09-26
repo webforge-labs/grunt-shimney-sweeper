@@ -22,7 +22,7 @@ before(function(done) {
   rimraf(tmpDir, done);
 });
 
-describe('merge-config', function() {
+describe('task merge-configs', function() {
   var bootjs = tmpPath('boot.js'), config;
 
   it('should require a targetFile as a path specified', function(done) {

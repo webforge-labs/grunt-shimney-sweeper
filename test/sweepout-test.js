@@ -8,7 +8,7 @@ var expect = chai.expect;
 var assert = chai.assert;
 chai.use(require('./helpers/file'));
 
-describe('sweepout', function() {
+describe('task sweepout', function() {
   var tmp = "tmp";
   var sweeper = require('../lib/shimney/sweeper')(grunt);
 

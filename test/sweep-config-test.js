@@ -8,28 +8,28 @@ var chai = require('chai'),
   assert = chai.assert;
 chai.use(require('./helpers/file'));
 
-var tmpDir = "tmp/";
-var tmpPath = function (relativePath) {
+var tmpDir = 'tmp/', tmpPath = function (relativePath) {
   return (tmpDir+relativePath).split(/\//).join(path.sep);
 };
 
 var GruntUtil = require('./helpers/grunt-utils');
-var utils = new GruntUtil('shimney-sweeper:update-config');
+var utils = new GruntUtil('sweep-config');
 
-before(function(done) {
-  rimraf(tmpDir, done);
-});
+describe('task sweep-config', function() {
 
-describe('update-config task', function() {
+  beforeEach(function(done) {
+    rimraf(tmpDir, done);
+  });
 
-  it("should create the correct config file", function () {
+  it("should create the correct config file", function (done) {
     utils.task('test').run(function (info) {
       utils.taskOK(info);
 
       var actual = grunt.file.read(tmpPath('config.js'));
       var expected = grunt.file.read('test/files/expected-config.js');
 
-      assert.equals(actual, expected, 'config file should be created successfully.');
+      assert.equal(actual, expected, 'config file should be created successfully.');
+      done();
     });
   });
 });

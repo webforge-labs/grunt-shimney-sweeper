@@ -97,5 +97,15 @@ describe('task sweepout', function() {
         done();
       });
     });
+
+    it("should provide a changed config written to options.configFile", function(done) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, configFile: tmp+'/other-config.js'}, function(err, config) {
+        expect(err).to.not.exist;
+
+        assert.deepEqual(config, {packages: packages});
+        expect([tmp, 'other-config.js']).to.be.an.existingFile;
+        done();
+      });
+    });
   });
 });

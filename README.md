@@ -28,10 +28,21 @@ If the plugin has been installed correctly, running `grunt --help` at the comman
 ## usage
 
 ```
-grunt shimney-sweeper:update-config
+grunt sweepout
 ```
 
+reads all your installed shimney packages exports them and writes a config for them.
+
+```
+grunt sweep-config
+```
 reads all your installed shimney packages from npm and writes your config to `www/js/config.js`.
+
+```
+grunt merge-configs
+```
+
+merges serval requirejs configuration together, into a new config file. The config file might be a module as a template and the merge of all configs can be adjusted
 
 use
 ```javascript

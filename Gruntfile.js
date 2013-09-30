@@ -35,8 +35,9 @@ module.exports = function(grunt) {
     "sweepout": {
       test: {
         options: {
-          packageDir: "tmp"
+          packageRoot: "tmp",
           // dir with commandline --dir
+          configFile: "build/js/shimney/config.js" // if not provided it will be created in dir/config.js
         }
       }
     },

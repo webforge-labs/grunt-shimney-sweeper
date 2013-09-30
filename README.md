@@ -59,7 +59,7 @@ grunt.initConfig({
   "sweepout": {
     test: {
       options: {
-        packageDir: "tmp"
+        // packageRoot: "tmp" // change this if your node_modules directory is not sibling to the gruntfile root
         //dir: "build/js" or specifiy the output-dir on commandline with --dir
       }
     }

@@ -36,10 +36,40 @@ reads all your installed shimney packages from npm and writes your config to `ww
 use
 ```javascript
 grunt.initConfig({
-  "shimney-sweeper": {
-    options: {
-      configFile: "other/placed/config.js"
-      nodeModulesUrl: "../../" // with trailing slash, without node_modules/ appended
+  "sweep-config": {
+    www: {
+      options: {
+        configFile: "www/js/config.js",
+        nodeModulesUrl: "../../" // with trailing slash, without node_modules/ appended
+      }
+    }
+  },
+
+  "sweepout": {
+    test: {
+      options: {
+        packageDir: "tmp"
+        //dir: "build/js" or specifiy the output-dir on commandline with --dir
+      }
+    }
+  },
+
+  "merge-configs": {
+    rjsboot: {
+      options: {
+        targetFile: 'build/js/boot.js',
+
+        configFiles: [
+          'www/js/mylibrary/config.js',
+          'www/js/config.js'
+        ]
+
+        modify: function(mergedConfig) { // can return or modify the mergedConfig that is written
+          return { paths: {'user': 'overriden'} };
+        }
+
+        template: 'resources/build-boot-template.js', // use this to inject the config in this file (will not be modified)
+      }
     }
   }
 });
@@ -50,3 +80,7 @@ in your `Gruntfile.js` to configure the sweeper.
 
 ### 1.0.0 => 1.1.0
   - change `config` option into `configFile`
+
+### 1.0.0 => 1.2.0
+  - commands are now: sweepout, sweep-config, merge-configs
+  - all commands are multi tasks

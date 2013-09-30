@@ -1,28 +1,25 @@
 var grunt = require('grunt');
 var rimraf = require('rimraf');
-var _ = grunt.util._;
 var path = require('path');
-var exec = require('child_process').exec;
 var chai = require('chai');
 var expect = chai.expect;
 var assert = chai.assert;
 chai.use(require('./helpers/file'));
-var ConfigFile = require('requirejs-config-file').ConfigFile;
-var GruntUtil = require('./helpers/grunt-utils');
 
 var tmpDir = "tmp/";
 var tmpPath = function (relativePath) {
   return (tmpDir+relativePath).split(/\//).join(path.sep);
 };
 
-var utils = new GruntUtil('shimney-sweeper-merge-config');
+var GruntUtil = require('./helpers/grunt-utils');
+var utils = new GruntUtil('merge-configs');
 var GRUNT_EXIT = utils.GRUNT_EXIT;
 
 before(function(done) {
   rimraf(tmpDir, done);
 });
 
-describe('merge-config', function() {
+describe('task merge-configs', function() {
   var bootjs = tmpPath('boot.js'), config;
 
   it('should require a targetFile as a path specified', function(done) {

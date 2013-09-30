@@ -22,15 +22,26 @@ module.exports = function(grunt) {
       tests: ['tmp'],
     },
 
-    "shimney-sweeper": {
-      options: {
-        configFile: "tmp/config.js",
-        packageDir: "test/files/package_fixture",
-        nodeModulesUrl: ""
+    "sweep-config": {
+      test: {
+        options: {
+          configFile: "tmp/config.js",
+          packageRoot: "test/files/package_fixture",
+          nodeModulesUrl: ""
+        }
       }
     },
 
-    "shimney-sweeper-merge-config": {
+    "sweepout": {
+      test: {
+        options: {
+          packageDir: "tmp"
+          // dir with commandline --dir
+        }
+      }
+    },
+
+    "merge-configs": {
       "no-target": {
         options: {
 
@@ -83,10 +94,10 @@ module.exports = function(grunt) {
         timeout: 3000,
         ignoreLeaks: true,
         ui: 'bdd',
-        //reporter: 'tap'
+        reporter: 'spec'
       },
 
-      all: { src: ['test/**/*Test.js'] }
+      all: { src: ['test/**/*-test.js'] }
     },
 
     release: {

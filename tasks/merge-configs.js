@@ -7,11 +7,6 @@ module.exports = function(grunt) {
   var stringifyObject = require("stringify-object");
   var sprintf = require('sprintf').sprintf;
 
-  grunt.util.tasks = function(taskName, taskTarget, config) {
-    grunt.config(taskName+'.'+taskTarget, config);
-    grunt.task.run(taskName+':'+taskTarget);
-  };
-
   var mergeConfigs = function(options, cb) {
     var mergedConfig = {};
 
@@ -35,7 +30,7 @@ module.exports = function(grunt) {
     );
   };
 
-  grunt.registerMultiTask('shimney-sweeper-merge-config', 'Merges configs together.', function() {
+  grunt.registerMultiTask('merge-configs', 'Merge several requirejs configs together.', function() {
     var done = this.async();
 
     var options = this.options({
@@ -51,7 +46,6 @@ module.exports = function(grunt) {
     if (!options.configFiles) {
       grunt.fatal('You need to specify at least two configFiles to merge');
     }
-
 
     mergeConfigs(options, function(err, mergedConfig) {
       if (err) return grunt.fatal(err);

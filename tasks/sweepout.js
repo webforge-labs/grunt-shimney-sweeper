@@ -11,6 +11,14 @@ module.exports = function (grunt) {
 
     var sweeper = require('../lib/shimney/sweeper')(grunt);
 
-    sweeper.sweepout(options, done);
+    sweeper.sweepout(options, function (err, config) {
+      if (err) {
+        grunt.log.error(err);
+        done(false);
+      } else {
+        grunt.log.ok('Sweeped out '+config.packages.length+' package'+(config.packages.length !== 1 ? 's' : '')+' to '+options.dir+'.');
+        done(true);
+      }
+    });
   });
 };

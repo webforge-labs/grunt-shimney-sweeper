@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     var done = this.async();
 
     var options = this.options({
-      configFile: "www/js/config.js",
+      configFile: undefined,
       packageRoot: ".",
       dir: grunt.option('dir')
     });

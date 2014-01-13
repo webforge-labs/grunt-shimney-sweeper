@@ -59,6 +59,7 @@ grunt.initConfig({
   "sweepout": {
     test: {
       options: {
+        //configFile: "build/js/config.js", // where to write the config to. Uses ${dir}/config.js as default
         // packageRoot: "tmp" // change this if your node_modules directory is not sibling to the gruntfile root
         //dir: "build/js" or specifiy the output-dir on commandline with --dir
       }

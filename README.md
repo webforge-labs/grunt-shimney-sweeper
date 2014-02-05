@@ -80,13 +80,26 @@ grunt.initConfig({
           return { paths: {'user': 'overriden'} };
         }
 
-        template: 'resources/build-boot-template.js', // use this to inject the config in this file (will not be modified)
+        template: 'resources/config-template.js', // use this to inject the config in this file (will not be modified)
       }
     }
   }
 });
 ```
 in your `Gruntfile.js` to configure the sweeper.
+
+your `config-template.js` used in merge-configs could be like this:
+
+```
+var require = {
+
+}
+
+if (typeof(requirejs) === "function") {
+  requirejs.config(require);
+}
+```
+This allows you to use the merged config before loading requirejs (recommended if you change the baseUrl) or as a data-main attribute in requirejs.
 
 ## Migration
 

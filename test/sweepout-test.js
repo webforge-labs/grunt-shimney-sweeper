@@ -54,7 +54,7 @@ describe('task sweepout', function() {
       rimraf(tmp, done);
     });
 
-    it('should export all packages avaible to shimney', function(done) {
+    it('should export all packages available to shimney', function(done) {
       sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
 
         _(packages).pluck('name').forEach(function(name) {
@@ -107,5 +107,51 @@ describe('task sweepout', function() {
         done();
       });
     });
+
+    it('should export all packages available to shimney with a baseUrl', function(done) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', baseUrl: "relative/path/", dir: tmp}, function(err, config) {
+
+        var packages = [
+          {
+            name: "knockout",
+            location: "relative/path/shimney/knockout"
+          },
+          {
+            name: "jquery",
+            location: "relative/path/shimney/jquery"
+          },
+          {
+            name: "sammy",
+            location: "relative/path/shimney/sammy"
+          },
+          {
+            name: "twitter-bootstrap",
+            location: "relative/path/shimney/twitter-bootstrap"
+          },
+          {
+            name: "lodash",
+            location: "relative/path/shimney/lodash"
+          },
+          {
+            name: "hogan",
+            location: "relative/path/shimney/hogan"
+          },
+          {
+            name: "cookie-monster",
+            location: "relative/path/shimney/cookie-monster"
+          },
+          {
+            name: "JSON",
+            location: "relative/path/shimney/JSON"
+
+          }
+        ];
+
+        assert.deepEqual(config, {packages: packages});
+
+        done();
+      });
+    });
+
   });
 });

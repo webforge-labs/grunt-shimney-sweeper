@@ -6,7 +6,8 @@ module.exports = function (grunt) {
     var options = this.options({
       configFile: undefined,
       packageRoot: ".",
-      dir: grunt.option('dir')
+      dir: grunt.option('dir'),
+      baseUrl: ""
     });
 
     var sweeper = require('../lib/shimney/sweeper')(grunt);

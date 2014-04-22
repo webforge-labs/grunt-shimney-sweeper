@@ -98,7 +98,7 @@ module.exports = function(grunt) {
         reporter: 'spec'
       },
 
-      all: { src: ['test/**/*.js'] }
+      all: { src: ['test/**/*-test.js'] }
     },
 
     release: {

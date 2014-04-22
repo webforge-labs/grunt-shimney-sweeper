@@ -25,7 +25,9 @@
     "async": "~0.2.9",
     "stringify-object": "~0.1.6",
     "sprintf": "~0.1.2",
-    "requirejs-config-file": "~1.2.0"
+    "fs.extra": "^1.2.1",
+    "requirejs-config-file": "~1.2.0",
+    "mkdirp": "0.3.5"
   },
   "devDependencies": {
     "grunt-contrib-clean": "~0.5.0",

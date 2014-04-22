@@ -4,6 +4,11 @@ module.exports = function (grunt) {
     var done = this.async();
 
     var options = this.options({
+      nodeModulesUrl: this.data.node_modules, // path to node_modules
+      js: "js",
+      less: "less",
+      css: "css",
+      img: "img",
       configFile: undefined,
       packageRoot: ".",
       dir: grunt.option('dir'),

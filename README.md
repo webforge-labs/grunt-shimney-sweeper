@@ -1,7 +1,7 @@
 # shimney-sweeper [![Build Status](https://travis-ci.org/webforge-labs/grunt-shimney-sweeper.png?branch=master)](https://travis-ci.org/webforge-labs/grunt-shimney-sweeper)
 
 
-Housekeep your shimney with grunt.
+Housekeep your shimney and shimney-ui with grunt.
 
 ## install with npm
 _If you haven't used [grunt][] before, be sure to check out the [Getting Started][] guide._
@@ -31,12 +31,12 @@ If the plugin has been installed correctly, running `grunt --help` at the comman
 grunt sweepout
 ```
 
-reads all your installed shimney packages exports them and writes a config for them.
+reads all your installed shimney and shimney-ui packages exports them and writes a config for them.
 
 ```
 grunt sweep-config
 ```
-reads all your installed shimney packages from npm and writes your config to `www/js/config.js`.
+reads all your installed shimney and shimney-ui packages from npm and writes your config to `www/js/config.js`.
 
 ```
 grunt merge-configs
@@ -60,8 +60,11 @@ grunt.initConfig({
     test: {
       options: {
         //configFile: "build/js/config.js", // where to write the config to. Uses ${dir}/config.js as default
-        // packageRoot: "tmp" // change this if your node_modules directory is not sibling to the gruntfile root
+        //packageRoot: "tmp" // change this if your node_modules directory is not sibling to the gruntfile root
         //dir: "build/js" or specifiy the output-dir on commandline with --dir
+        //js: specifiy the path, where js-files should be saved. By default it is "js"
+        //css: specifiy the path, where css-files should be saved. By default it is "css"
+        //less: specifiy the path, where less-files should be saved. By default it is "less"
       }
     }
   },
@@ -101,11 +104,18 @@ if (typeof(requirejs) === "function") {
 ```
 This allows you to use the merged config before loading requirejs (recommended if you change the baseUrl) or as a data-main attribute in requirejs.
 
+## how to build a shimney-ui package
+
+You can read [here](https://github.com/ybobkova/grunt-shimney-sweeper/blob/master/ui-package-instructions.md), how to build a shimney-ui package
+
 ## Migration
 
 ### 1.0.0 => 1.1.0
   - change `config` option into `configFile`
 
-### 1.0.0 => 1.2.0
+### 1.1.0 => 1.2.0
   - commands are now: sweepout, sweep-config, merge-configs
   - all commands are multi tasks
+
+### 1.2.0 => 1.3.0
+  - works also with shimney-ui packages

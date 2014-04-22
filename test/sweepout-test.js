@@ -46,7 +46,14 @@ describe('task sweepout', function() {
       {
         name: "JSON",
         location: "shimney/JSON"
-
+      },
+      {
+        name: "ui-datepicker",
+        location: "shimney/ui-datepicker"
+      },
+      {
+        name: "ui-autocomplete",
+        location: "shimney/ui-autocomplete"
       }
     ];
 
@@ -55,7 +62,7 @@ describe('task sweepout', function() {
     });
 
     it('should export all packages available to shimney', function(done) {
-      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, js: "js", less: "less", css: "css", img: "img"}, function(err, config) {
 
         _(packages).pluck('name').forEach(function(name) {
           var packageDir = [tmp, 'shimney', name].join(path.sep);
@@ -64,13 +71,12 @@ describe('task sweepout', function() {
           expect(packageDir+path.sep+'main.js').to.be.an.existingFile;
         });
 
-
         done();
       });
     });
 
-    it("should export the assets listet in the shimney config as well", function(done) {
-      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
+    it("should export the assets listed in the shimney config as well", function(done) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, js: "js", less: "less", css: "css", img: "img"}, function(err, config) {
 
         var bs = [tmp, 'shimney', 'twitter-bootstrap'].join(path.sep);
 
@@ -88,18 +94,47 @@ describe('task sweepout', function() {
       });
     });
 
-    it("should provide a changed config for the exported packages and write it", function(done) {
-      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp}, function(err, config) {
-        expect(err).to.not.exist;
+    it("should export the css, less und images from ui-packages", function(done) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, js: "js", less: "less", css: "css", img: "img"}, function(err, config) {
 
+        var dp = [tmp, 'shimney', 'ui-datepicker'].join(path.sep);
+
+        // check some specials
+        expect([dp, 'css']).to.be.an.existingDirectory;
+        expect([dp, 'img']).to.be.an.existingDirectory;
+        expect([dp, 'less']).to.be.an.existingDirectory;
+
+        expect([dp, 'img', 'dp.png']).to.be.an.existingFile;
+        expect([dp, 'css', "dp.css"]).to.be.an.existingFile;
+        expect([dp, 'less', "dp.less"]).to.be.an.existingFile;
+
+
+        var ac = [tmp, 'shimney', 'ui-autocomplete'].join(path.sep);
+
+        // check some specials
+        expect([ac, 'css']).to.be.an.existingDirectory;
+        expect([ac, 'img']).to.be.an.existingDirectory;
+        expect([ac, 'less']).to.be.an.existingDirectory;
+
+        expect([ac, 'img', 'auco.png']).to.be.an.existingFile;
+        expect([ac, 'img', 'ac.jpg']).to.be.an.existingFile;
+        expect([ac, 'less', 'au.less']).to.be.an.existingFile;
+        expect([ac, 'css', 'au.css']).to.be.an.existingFile;
+        done();
+      });
+    });
+
+    it("should provide a changed config for the exported packages and write it", function(done) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, js: "js", less: "less", css: "css", img: "img"}, function(err, config) {
+        expect(err).to.not.exist;
         assert.deepEqual(config, {packages: packages});
         expect([tmp, 'config.js']).to.be.an.existingFile;
         done();
       });
     });
-
+ 
     it("should provide a changed config written to options.configFile", function(done) {
-      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, configFile: tmp+'/other-config.js'}, function(err, config) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', dir: tmp, js: "js", less: "less", css: "css", img: "img", configFile: tmp+'/other-config.js'}, function(err, config) {
         expect(err).to.not.exist;
 
         assert.deepEqual(config, {packages: packages});
@@ -109,7 +144,7 @@ describe('task sweepout', function() {
     });
 
     it('should export all packages available to shimney with a baseUrl', function(done) {
-      sweeper.sweepout({packageRoot: 'test/files/package_fixture', baseUrl: "relative/path/", dir: tmp}, function(err, config) {
+      sweeper.sweepout({packageRoot: 'test/files/package_fixture', baseUrl: "relative/path/", dir: tmp, js: "js", less: "less", css: "css", img: "img"}, function(err, config) {
 
         var packages = [
           {
@@ -143,7 +178,14 @@ describe('task sweepout', function() {
           {
             name: "JSON",
             location: "relative/path/shimney/JSON"
-
+          },
+          {
+            name: "ui-datepicker",
+            location: "relative/path/shimney/ui-datepicker"
+          },
+          {
+            name: "ui-autocomplete",
+            location: "relative/path/shimney/ui-autocomplete"
           }
         ];
 

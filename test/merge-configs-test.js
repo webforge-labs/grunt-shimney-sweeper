@@ -76,6 +76,46 @@ describe('task merge-configs', function() {
           done();
         });
       });
+    
+
+      it.only('should merge the packages as a special config property from both configs into the target-file packages respecting the name attribute', function(done) {
+        utils.runAndRead('test', bootjs, function(err, config) {
+          expect(err).to.not.exist;
+
+          expect(config).to.have.property('packages');
+
+          var packages = {}, index = [];
+          config.packages.forEach(function(pkg) {
+            index.push(pkg.name);
+            packages[pkg.name] = pkg;
+          });
+
+          
+          chai.config.showDiff = true;
+
+          // dont use simplemocha for seeing the diff
+          expect(index, 'not all packages are merged correctly').to.be.eql([
+            'knockout',
+            'jquery',
+            'sammy',
+            'twitter-bootstrap',
+            'lodash',
+            'hogan',
+            'cookie-monster',
+            'JSON',
+            'datepicker',
+          ]);
+
+          expect(packages).to.have.deep.property('knockout.name', 'knockout');
+          expect(packages, 'location for knockout should be overridden by project config').to.have.deep.property('knockout.location', '../other-path/../node_modules/shimney-knockout');
+
+          expect(packages).to.have.deep.property('datepicker.name', 'datepicker');
+          expect(packages, 'jquery should not be overriden by project config by index').to.have.deep.property('jquery.name', 'jquery');
+          
+
+          done();
+        });
+      });
     });
 
     describe('and when called with template option', function () {

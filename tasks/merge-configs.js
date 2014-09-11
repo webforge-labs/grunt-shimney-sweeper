@@ -2,10 +2,30 @@ module.exports = function(grunt) {
   'use strict';
 
   var ConfigFile = require('requirejs-config-file').ConfigFile;
-  var _ = grunt.util._;
+  var _ = require('lodash');
   var async = require('async');
   var stringifyObject = require("stringify-object");
   var sprintf = require('sprintf').sprintf;
+
+  var mergeConfig = function(configMine, configTheirs) {
+    // paths and everything else is easy to merge, but not packages, they have the key name: which should be merging criteria (not the position in the array packages)
+
+    configTheirs = _.clone(configTheirs);
+
+    // reindex by name to allow correct merging
+    if (configMine.packages) {
+      configMine.packages = _.indexBy(configMine.packages, 'name');
+    }
+    if (configTheirs.packages) {
+      configTheirs.packages = _.indexBy(configTheirs.packages, 'name');
+    }
+
+    _.merge(configMine, configTheirs);
+
+    // convert back to numeric array
+    configMine.packages = _.values(configMine.packages);
+
+  };
 
   var mergeConfigs = function(options, cb) {
     var mergedConfig = {};
@@ -18,7 +38,7 @@ module.exports = function(grunt) {
         configFile.read(function(err, config) {
           if (err) return done('Cannot read the config from: '+configFilePath+' '+err);
 
-          mergedConfig = _.merge(mergedConfig, config);
+          mergeConfig(mergedConfig, config);
           done();
         });
       }, 
@@ -74,7 +94,7 @@ module.exports = function(grunt) {
       targetConfigFile.read(function(err, config) {
         if (err) return grunt.fatal('Cannot read config from template '+err);
 
-        _.merge(config, mergedConfig);
+        mergeConfig(config, mergedConfig);
 
         targetConfigFile.write(function (err) {
           if (err) return grunt.fatal(err);

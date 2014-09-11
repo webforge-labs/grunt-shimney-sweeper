@@ -25,13 +25,14 @@
     "async": "~0.2.9",
     "stringify-object": "~0.1.6",
     "sprintf": "~0.1.2",
-    "requirejs-config-file": "~1.2.0"
+    "requirejs-config-file": "~1.2.0",
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-release": "~0.5.1",
-    "chai": "~1.7.2",
+    "chai": "~1.9.0",
     "rimraf": "~2.2.2",
     "grunt-simple-mocha": "~0.4.0"
   }
